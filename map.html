@@ -582,13 +582,8 @@
                             return L.TileLayer.prototype.getTileUrl.call(tileLayer, coords);
                         }
                     }
-                    for (var tile of cached_tiles) {
-                        if (tile.toString() == target) {
-                            this._url = `slugcats/cached/${region.toLowerCase()}/{z}/{x}_{y}.png`;
-                            return L.TileLayer.prototype.getTileUrl.call(tileLayer, coords);
-                        }
-                    }
-                    return "MISSING"; // will error, that's OK
+                    this._url = `slugcats/cached/${region.toLowerCase()}/{z}/{x}_{y}.png`;
+                    return L.TileLayer.prototype.getTileUrl.call(tileLayer, coords);
                 };
                 tileLayer.addTo(map);
 
