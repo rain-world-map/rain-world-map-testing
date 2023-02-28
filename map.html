@@ -579,14 +579,10 @@
                     var target = [coords.x, coords.y, this._getZoomForUrl()].toString();
                     for (var tile of imaged_tiles) {
                         if (tile.toString() == target) {
-                            console.log("FOUND. setting to " + pdifficulty);
                             scug = pdifficulty;
                             break;
                         }
                     }
-
-                    if (scug == "cached") console.log(`couldn't find ${target}`);
-
                     // modify url function to get certain tiles from cache instead of given path
                     this._url = `slugcats/${scug}/${region.toLowerCase()}/{z}/{x}_{y}.png`;
                     return L.TileLayer.prototype.getTileUrl.call(tileLayer, coords);
