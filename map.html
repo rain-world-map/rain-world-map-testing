@@ -553,8 +553,6 @@
         var loadedDifficulty = null;
         var loadedRegion = null;
         var loadedModded = {};
-
-        var printedZ = -100;
         function loadRegion(pdifficulty, pregion, pmodded) {
             if (loadedDifficulty == pdifficulty && loadedRegion == pregion && loadedModded == pmodded)
                 return;
@@ -574,22 +572,16 @@
                     maxNativeZoom: 0, // important, stop requesting tiles at this point
                 });
                 var imaged_tiles = json["imaged_tiles"];
-                var slugcat = pdifficulty; // this._url = difficulty
-                var regio = region.toLowerCase();
                 tileLayer.getTileUrl = function (coords) {
-                    var scug = slugcat;
-                    var imaged = imaged_tiles.includes([coords.x, coords.y, this._getZoomForUrl()]);
-
-                    console.log(`${scug}/${regio} @ ${console.log([coords.x, coords.y, this._getZoomForUrl()])} imaged? ${imaged}`);
-                    if (printedZ != this._getZoomForUrl()) {
-                        printedZ = this._getZoomForUrl();
-                        console.log(imaged_tiles);
+                    var scug = "cached";
+                    for (var imagedCoord in imaged_tiles) {
+                        if (imagedCoord[0] == coords.x && imagedCoord[1] == coords.y && imagedCoord[2] == this._getZoomForUrl()) {
+                            scug = pdifficulty;
+                            break;
+                        }
                     }
                     // modify url function to get certain tiles from cache instead of given path
-                    if (!imaged) {
-                        scug = "cached";
-                    }
-                    this._url = `slugcats/${scug}/${regio}/{z}/{x}_{y}.png`;
+                    this._url = `slugcats/${scug}/${region.toLowerCase()}/{z}/{x}_{y}.png`;
                     return L.TileLayer.prototype.getTileUrl.call(tileLayer, coords);
                 };
                 tileLayer.addTo(map);
