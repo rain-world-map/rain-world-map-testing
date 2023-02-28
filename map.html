@@ -553,7 +553,6 @@
         var loadedDifficulty = null;
         var loadedRegion = null;
         var loadedModded = {};
-        var imaged_tiles_debug = [];
         function loadRegion(pdifficulty, pregion, pmodded) {
             if (loadedDifficulty == pdifficulty && loadedRegion == pregion && loadedModded == pmodded)
                 return;
@@ -573,19 +572,23 @@
                     maxNativeZoom: 0, // important, stop requesting tiles at this point
                 });
                 var imaged_tiles = json["imaged_tiles"];
-                imaged_tiles_debug = imaged_tiles;
+                var cached_tiles = json["cached_tiles"];
                 tileLayer.getTileUrl = function (coords) {
-                    var scug = "cached";
+                    // tiles can be imaged, cached, or missing
                     var target = [coords.x, coords.y, this._getZoomForUrl()].toString();
                     for (var tile of imaged_tiles) {
                         if (tile.toString() == target) {
-                            scug = pdifficulty;
-                            break;
+                            this._url = `slugcats/${pdifficulty}/${region.toLowerCase()}/{z}/{x}_{y}.png`;
+                            return L.TileLayer.prototype.getTileUrl.call(tileLayer, coords);
                         }
                     }
-                    // modify url function to get certain tiles from cache instead of given path
-                    this._url = `slugcats/${scug}/${region.toLowerCase()}/{z}/{x}_{y}.png`;
-                    return L.TileLayer.prototype.getTileUrl.call(tileLayer, coords);
+                    for (var tile of cached_tiles) {
+                        if (tile.toString() == target) {
+                            this._url = `slugcats/cached/${region.toLowerCase()}/{z}/{x}_{y}.png`;
+                            return L.TileLayer.prototype.getTileUrl.call(tileLayer, coords);
+                        }
+                    }
+                    return "MISSING"; // will error, that's OK
                 };
                 tileLayer.addTo(map);
 
