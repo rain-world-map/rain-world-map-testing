@@ -574,8 +574,11 @@
                 var imaged_tiles = json["imaged_tiles"];
                 tileLayer.getTileUrl = function (coords) {
                     var scug = "cached";
+                    console.log("Looking for : " + [coords.x, coords.y, this._getZoomForUrl()]);
                     for (var imagedCoord of imaged_tiles) {
+                        console.log(imagedCoord);
                         if (imagedCoord[0] == coords.x && imagedCoord[1] == coords.y && imagedCoord[2] == this._getZoomForUrl()) {
+                            console.log("FOUND. setting to " + pdifficulty);
                             scug = pdifficulty;
                             break;
                         }
