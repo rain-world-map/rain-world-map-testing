@@ -574,7 +574,7 @@
                 var imaged_tiles = json["imaged_tiles"];
                 tileLayer.getTileUrl = function (coords) {
                     var scug = "cached";
-                    for (var imagedCoord in imaged_tiles) {
+                    for (var imagedCoord of imaged_tiles) {
                         if (imagedCoord[0] == coords.x && imagedCoord[1] == coords.y && imagedCoord[2] == this._getZoomForUrl()) {
                             scug = pdifficulty;
                             break;
