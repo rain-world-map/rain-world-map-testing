@@ -565,7 +565,7 @@
 
                 // Tileset layer
                 if (tileLayer != null) map.removeLayer(tileLayer);
-                tileLayer = L.tileLayer(pdifficulty, {
+                tileLayer = L.tileLayer(`slugcats/${pdifficulty}/${region.toLowerCase()}/{z}/{x}_{y}.png`, {
                     attribution: "<a href=\"https://store.steampowered.com/app/312520/Rain_World/\">Rain World</a> by <a href=\"https://twitter.com/VideocultMedia\">Videocult</a>",
                     minZoom: -7,
                     maxZoom: 3,
